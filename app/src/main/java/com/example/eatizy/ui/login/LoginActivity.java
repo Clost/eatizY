@@ -1,7 +1,9 @@
 package com.example.eatizy.ui.login;
 
+import android.animation.Animator;
 import android.app.Activity;
 
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -12,16 +14,25 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewPropertyAnimator;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 import com.example.eatizy.MainActivity;
 import com.example.eatizy.R;
@@ -31,13 +42,75 @@ import com.example.eatizy.ui.login.LoginViewModelFactory;
 public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
+    private ImageView eatizyIconImageView;
+    private TextView eatizyTextView;
+    private ProgressBar loadingProgressBar;
+    private RelativeLayout rootView, afterAnimationView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
         loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
+
+
+        initViews();
+        new CountDownTimer(5000, 1000) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                //eatizyTextView.setVisibility(GONE);
+                loadingProgressBar.setVisibility(GONE);
+                rootView.setBackgroundColor(ContextCompat.getColor(LoginActivity.this, R.color.colorSplashText));
+                eatizyIconImageView.setImageResource(R.drawable.logo_eatizy);
+                startAnimation();
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        }.start();
+    }
+
+    private void initViews() {
+        eatizyIconImageView = findViewById(R.id.eatizyIconImageView);
+        //eatizyTextView = findViewById(R.id.eatizyTextView);
+        loadingProgressBar = findViewById(R.id.loadingProgressBar);
+        rootView = findViewById(R.id.rootView);
+        afterAnimationView = findViewById(R.id.afterAnimationView);
+    }
+
+    private void startAnimation() {
+        ViewPropertyAnimator viewPropertyAnimator = eatizyIconImageView.animate();
+        viewPropertyAnimator.x(50f);
+        viewPropertyAnimator.y(100f);
+        viewPropertyAnimator.setDuration(5000);
+        viewPropertyAnimator.setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                afterAnimationView.setVisibility(VISIBLE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
 
         final EditText usernameEditText = findViewById(R.id.username);
         final EditText passwordEditText = findViewById(R.id.password);

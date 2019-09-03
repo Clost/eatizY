@@ -22,4 +22,14 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+
+    <string name="booki">BookI</string>
+    <string name="welcome_back">Hi</string>
+    <string name="read_it_together">Let\'s find what to eat</string>
+    <string name="skip">Continue as guest</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="sign_up">Sign up</string>
+    <string name="forget_password">Forget Password.?</string>
 </resources>
